@@ -15,8 +15,14 @@ public class BookRepository {
     // it have default constructor:
     // now define the book structure here
 
-    List<Book> CollectionsOfBook = new ArrayList<>();
-    int id = 1;    // when we start it will be one:
+    List<Book> CollectionsOfBook;
+    // when we start it will be one:
+    private int id;
+
+    public BookRepository(){
+        this.CollectionsOfBook = new ArrayList<Book>();
+        this.id = 1;
+    }
 
 
     public Book findById(int id) {

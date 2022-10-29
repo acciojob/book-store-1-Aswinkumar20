@@ -25,7 +25,7 @@ public class BookService {
     // now the major query is to manipulate the data:
 
     public Book findById(String id){
-        return bookreopository.findById(Integer.valueOf(id));
+        return bookreopository.findById(Integer.parseInt(id));
 
     }
 
@@ -38,7 +38,7 @@ public class BookService {
     }
 
     public void deleteById(String id){
-        bookreopository.deleteById(Integer.valueOf(id));
+        bookreopository.deleteById(Integer.parseInt(id));
     }
 
     public void deleteAllBooks(){
