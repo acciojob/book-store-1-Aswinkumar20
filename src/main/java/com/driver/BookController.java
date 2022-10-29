@@ -3,20 +3,20 @@ package com.driver;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("books")
 public class BookController {
+
+    @Autowired
+    BookService bookService;
 
     private List<Book> bookList;
     private int id;
@@ -45,30 +45,65 @@ public class BookController {
     // post request /create-book
     // pass book as request body
     @PostMapping("/create-book")
-    public ResponseEntity<Book> createBook(@RequestBody Book book){
+    public ResponseEntity<Book> createBook(@RequestBody Book book) {
         // Your code goes here.
-        return new ResponseEntity<>(book, HttpStatus.CREATED);
+        Book newBook = bookService.createBook(book);
+        return new ResponseEntity<>(newBook, HttpStatus.CREATED);
     }
 
     // get request /get-book-by-id/{id}
     // pass id as path variable
     // getBookById()
 
+    @GetMapping("/get-book-by-id/{id}")
+    public ResponseEntity<Book> getBookById(@PathVariable String id){
+        Book newBook = bookService.findById(id);
+        return new ResponseEntity<>(newBook, HttpStatus.CREATED);
+    }
+
+
     // delete request /delete-book-by-id/{id}
     // pass id as path variable
     // deleteBookById()
 
+    @DeleteMapping("/delete-book-by-id/{id}")
+    public ResponseEntity deleteById(@PathVariable String id){
+        bookService.deleteById(id);
+        return new ResponseEntity("Book with id " + id + " deleted successfully", HttpStatus.CREATED);
+    }
+
     // get request /get-all-books
     // getAllBooks()
 
+    @GetMapping("/get-all-books")
+    public ResponseEntity getAllBooks(){
+        List<Book> allBooks = bookService.getBooks();
+        return  new ResponseEntity<>(allBooks, HttpStatus.CREATED);
+    }
     // delete request /delete-all-books
     // deleteAllBooks()
+
+    @DeleteMapping("/delete-all-books")
+    public ResponseEntity deleteAllBooks(){
+        bookService.deleteAllBooks();
+        return new ResponseEntity<>("All books deleted", HttpStatus.CREATED);
+    }
 
     // get request /get-books-by-author
     // pass author name as request param
     // getBooksByAuthor()
 
+    @GetMapping("/get-books-by-author")
+    public ResponseEntity geBooksByAuthor(@RequestParam String author){
+        List<Book> book = bookService.findByAuthor(author);
+        return new ResponseEntity<>(book, HttpStatus.CREATED);
+    }
     // get request /get-books-by-genre
     // pass genre name as request param
     // getBooksByGenre()
+    @GetMapping("/get-books-by-genre")
+    public ResponseEntity getBooksByGenre(@RequestParam String genre){
+        List<Book> books = bookService.findByGenre(genre);
+        return new ResponseEntity<>(books, HttpStatus.CREATED);
+    }
 }
